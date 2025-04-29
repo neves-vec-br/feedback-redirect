@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sending your feedback...</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      color: #333;
+      text-align: center;
+      padding-top: 20vh;
+    }
+  </style>
+  <script>
+    function getQueryParam(param) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(param);
+    }
+
+    async function sendToMake() {
+      const score = getQueryParam('score');
+      if (!score) {
+        document.body.innerHTML = "<p>No score provided.</p>";
+        return;
+      }
+
+      try {
+        await fetch("https://hook.integromat.com/SEU_WEBHOOK_ID", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ score })
+        });
+
+        window.location.href = "https://sites.google.com/view/suapaginadeagradecimento";
+      } catch (e) {
+        document.body.innerHTML = "<p>Something went wrong. Please try again later.</p>";
+      }
+    }
+
+    window.onload = sendToMake;
+  </script>
+</head>
+<body>
+  <p>Sending your feedback. Please wait...</p>
+</body>
+</html>
