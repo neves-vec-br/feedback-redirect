@@ -2,46 +2,32 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Sending your feedback...</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-      color: #333;
-      text-align: center;
-      padding-top: 20vh;
-    }
-  </style>
+  <title>Sending Feedback...</title>
   <script>
-    function getQueryParam(param) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(param);
+    const urlParams = new URLSearchParams(window.location.search);
+    const score = urlParams.get("score");
+    const taskId = urlParams.get("taskId");
+
+    if (score && taskId) {
+      fetch("https://hook.us1.make.com/xo6lvhva5y63xh66aumvrwbl8ibq6bfj", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ score: score, taskId: taskId })
+      })
+      .then(() => {
+        window.location.href = "https://neves-vec-br.github.io/feedback-redirect/thankyou.html";
+      })
+      .catch(() => {
+        alert("Erro ao enviar feedback.");
+      });
+    } else {
+      alert("Dados inválidos na URL.");
     }
-
-    async function sendToMake() {
-      const score = getQueryParam('score');
-      if (!score) {
-        document.body.innerHTML = "<p>No score provided.</p>";
-        return;
-      }
-
-      try {
-        await fetch("https://hook.integromat.com/SEU_WEBHOOK_ID", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ score })
-        });
-
-        window.location.href = "https://sites.google.com/view/suapaginadeagradecimento";
-      } catch (e) {
-        document.body.innerHTML = "<p>Something went wrong. Please try again later.</p>";
-      }
-    }
-
-    window.onload = sendToMake;
   </script>
 </head>
 <body>
-  <p>Sending your feedback. Please wait...</p>
+  <p>Enviando seu feedback...</p>
 </body>
 </html>
